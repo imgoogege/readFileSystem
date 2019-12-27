@@ -38,13 +38,13 @@ func Gin() {
 		// 将从前端传过来的string转换为int
 		startNum, err := strconv.Atoi(start)
 		if err != nil {
-			ctx.JSON(503, gin.H{
+			ctx.JSON(502, gin.H{
 				"message": "你应该输入数字，你输入的非可用字段",
 			})
 		}
 		endNum, err := strconv.Atoi(end)
 		if err != nil {
-			ctx.JSON(503, gin.H{
+			ctx.JSON(502, gin.H{
 				"message": "你应该输入数字，你输入的非可用字段",
 			})
 		}
@@ -52,7 +52,7 @@ func Gin() {
 		fileNames := ReadFileName(ctx)
 		// 读取文件。并且写入文件。
 		if err = ReadFile(ctx, nil, fileNames, startNum, endNum); err != nil {
-			ctx.JSON(503, gin.H{
+			ctx.JSON(502, gin.H{
 				"message": "读取文件错误",
 				"error":   err,
 			})
@@ -121,7 +121,7 @@ func ReadFileName(ctx *gin.Context) []string {
 	result := make([]string, 0)
 	files, err := ioutil.ReadDir("./file")
 	if err != nil {
-		ctx.JSON(503, gin.H{
+		ctx.JSON(502, gin.H{
 			"message": "无法读取数据名称",
 			"error":   err,
 		})
@@ -137,7 +137,7 @@ func ReadFileName(ctx *gin.Context) []string {
 		} else if len(v) == 7 {
 			result[i] = v[:3]
 		} else {
-			ctx.JSON(503, gin.H{
+			ctx.JSON(502, gin.H{
 				"message": "设置问题，数据太多了，已经超过1000了无法操作",
 			})
 		}
@@ -160,7 +160,7 @@ func ReadFileName(ctx *gin.Context) []string {
 func writeFileToCsv(ctx *gin.Context, re [][]string) {
 	file, err := os.Create("./aoligei.csv")
 	if err != nil {
-		ctx.JSON(503, gin.H{
+		ctx.JSON(502, gin.H{
 			"message": "无法创建文件",
 			"error":   err,
 		})
@@ -176,7 +176,7 @@ func writeFileToCsv(ctx *gin.Context, re [][]string) {
 	}
 	w.Flush()
 	if err := w.Error(); err != nil {
-		ctx.JSON(503, gin.H{
+		ctx.JSON(502, gin.H{
 			"message": "写入数据错误",
 			"error":   err,
 		})
@@ -187,7 +187,7 @@ func writeFileToCsv(ctx *gin.Context, re [][]string) {
 func DeleteAllFile(ctx *gin.Context) {
 	err := os.RemoveAll("./file")
 	if err != nil {
-		ctx.JSON(503, gin.H{
+		ctx.JSON(502, gin.H{
 			"message": "无法删除文件",
 			"error":   err,
 		})
